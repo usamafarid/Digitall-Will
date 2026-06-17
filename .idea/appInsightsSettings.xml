@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.digitalwill" />
+                  <option name="mobileSdkAppId" value="1:57559936279:android:0a25c177e7c0a478bc5b52" />
+                  <option name="projectId" value="digital-will-637ed" />
+                  <option name="projectNumber" value="57559936279" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
