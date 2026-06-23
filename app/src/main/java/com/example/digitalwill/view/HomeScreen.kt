@@ -72,7 +72,7 @@ fun HomeScreen(navController: NavHostController) {
 
             // Quick Actions Grid
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                QuickActionCard("AI Chatbot", "Write Will", Modifier.weight(1f)) {
+                QuickActionCard("AI will Advisor", "Write Will", Modifier.weight(1f)) {
                     navController.navigate("chatbot")
                 }
                 QuickActionCard("Custodians", "2 assigned", Modifier.weight(1f)) {

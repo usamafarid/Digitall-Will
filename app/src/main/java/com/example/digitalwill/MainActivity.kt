@@ -1,9 +1,13 @@
 package com.example.digitalwill
 
+import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -12,9 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -32,11 +39,13 @@ import com.example.digitalwill.view.LifeGoalScreen
 import com.example.digitalwill.view.Login
 import com.example.digitalwill.view.ProfileScreen
 import com.example.digitalwill.view.WillScreen
+import com.example.digitalwill.viewmodel.AuthViewModel
+import com.google.firebase.firestore.memoryCacheSettings
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
 class MainActivity : ComponentActivity() {
-
+//    val context = LocalContext.providesDefault(applicationContext)
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,11 +62,27 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun DigitalWillNavHost() {
+//    val context = LocalContext.current.applicationContext
+    val authViewModel : AuthViewModel = viewModel()
     val navController = rememberNavController()
+//    if (authViewModel.getUserPIN()!!.isNotEmpty() )
+//    {
+//     navController.navigate("home")
+//    }
+//    else{
+//        navController.navigate("splash")
+//    }
+//    val startRoute = if (authViewModel.getUserPIN()!!.isNotEmpty()){
+//        "home"
+//    } else {
+//        "login"
+//    }
     NavHost(navController = navController, startDestination = "splash") {
+
         composable("splash") {
             SplashScreen(onTimeout = {
                 navController.navigate("login") {
@@ -78,7 +103,7 @@ fun DigitalWillNavHost() {
         composable("create_pin") {
             CreatePinScreen(
                 onBack = { navController.popBackStack() } ,
-                onContinue = {
+                onSave = {
                     navController.navigate("home") {
                         popUpTo("create_pin") { inclusive = true }
                     }

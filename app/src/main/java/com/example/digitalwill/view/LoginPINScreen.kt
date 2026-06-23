@@ -2,6 +2,7 @@ package com.example.digitalwill.view
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,17 +24,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.application
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.digitalwill.R
 import com.example.digitalwill.viewmodel.AuthViewModel
 
-
-
+@SuppressLint("ViewModelConstructorInComposable")
 @Composable
-fun CreatePinScreen(onBack: () -> Unit, onSave: () -> Unit) {
+fun LoginPINScreen(onBack: () -> Unit, onUnlock: () -> Unit) {
 
     var pin by remember { mutableStateOf("") }
     val context = LocalContext.current
@@ -83,7 +80,7 @@ fun CreatePinScreen(onBack: () -> Unit, onSave: () -> Unit) {
             Spacer(modifier = Modifier.height(5.dp))
 
             Text(
-                text = "create your 4 Digit PIN",
+                text = "Enter your 4 Digit PIN",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -96,14 +93,14 @@ fun CreatePinScreen(onBack: () -> Unit, onSave: () -> Unit) {
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 repeat(4) { index ->
-                    PinIndicator(isFilled = index < pin.length)
+                    PinIndicators(isFilled = index < pin.length)
                 }
             }
 
             Spacer(modifier = Modifier.height(40.dp))
 
             // Numeric Keypad
-            NumericKeypad(
+            NumericKeypads(
                 onNumberClick = { number ->
                     if (pin.length < 4) {
                         pin += number
@@ -125,12 +122,23 @@ fun CreatePinScreen(onBack: () -> Unit, onSave: () -> Unit) {
             Button(
                 onClick = {
                     if (pin.length == 4) {
-                        onSave()
-                       // authViewModel.sharedPreferences.getString("user_pin" , pin)
-                        authViewModel.getApplication<Application>()
+                       // onUnlock()
+                        // authViewModel.sharedPreferences.getString("user_pin" , pin)
+                      val savePin= authViewModel.getUserPIN()
+                        if (pin == savePin){
+                          onUnlock()
 
+                        }
+                        else{
+                            Toast.makeText(
+                                context ,
+                                "Wrong PIN,Please enter correct PIN" ,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            pin=""
+                        }
                     }
-                          },
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -142,7 +150,7 @@ fun CreatePinScreen(onBack: () -> Unit, onSave: () -> Unit) {
                 enabled = pin.length == 4
             ) {
                 Text(
-                    text = "SAVE",
+                    text = "Unlock",
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
@@ -151,13 +159,13 @@ fun CreatePinScreen(onBack: () -> Unit, onSave: () -> Unit) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = "Skip for now",
-                modifier = Modifier.clickable { onSave() },
-                color = Color.Black,
-                fontSize = 16.sp,
-                textDecoration = TextDecoration.Underline
-            )
+//            Text(
+//                text = "Skip for now",
+//                modifier = Modifier.clickable { onContinue() },
+//                color = Color.Black,
+//                fontSize = 16.sp,
+//                textDecoration = TextDecoration.Underline
+//            )
 
             Spacer(modifier = Modifier.height(10.dp))
         }
@@ -165,7 +173,7 @@ fun CreatePinScreen(onBack: () -> Unit, onSave: () -> Unit) {
 }
 
 @Composable
-fun PinIndicator(isFilled: Boolean) {
+fun PinIndicators(isFilled: Boolean) {
     Surface(
         modifier = Modifier.size(50.dp),
         shape = CircleShape,
@@ -177,13 +185,13 @@ fun PinIndicator(isFilled: Boolean) {
                 Box(
                     modifier = Modifier
                         .size(16.dp)
-                        .background(Color.Black, CircleShape)
+                        .background(Color.Black , CircleShape)
                 )
             } else {
                 Box(
                     modifier = Modifier
                         .size(16.dp)
-                        .background(Color.White.copy(alpha = 0.3f), CircleShape)
+                        .background(Color.White.copy(alpha = 0.3f) , CircleShape)
                 )
             }
         }
@@ -191,7 +199,7 @@ fun PinIndicator(isFilled: Boolean) {
 }
 
 @Composable
-fun NumericKeypad(
+fun NumericKeypads(
     onNumberClick: (String) -> Unit,
     onDeleteClick: () -> Unit,
     onClearClick: () -> Unit
@@ -212,7 +220,7 @@ fun NumericKeypad(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 row.forEach { key ->
-                    KeypadButton(
+                    KeypadButtons(
                         text = key,
                         onClick = {
                             when (key) {
@@ -229,10 +237,10 @@ fun NumericKeypad(
 }
 
 @Composable
-fun KeypadButton(text: String, onClick: () -> Unit) {
+fun KeypadButtons(text: String, onClick: () -> Unit) {
     Surface(
         modifier = Modifier
-            .size(width = 60.dp, height = 60.dp)
+            .size(width = 60.dp , height = 60.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(20.dp),
         color = Color.White,
@@ -251,6 +259,6 @@ fun KeypadButton(text: String, onClick: () -> Unit) {
 
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=400dp,height=800dp")
 @Composable
-fun CreatePinPreview() {
-    CreatePinScreen(onBack = {}, onSave = {})
+fun LoginPINScreenPreview() {
+    LoginPINScreen(onBack = {}, onUnlock = {})
 }

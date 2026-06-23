@@ -1,5 +1,8 @@
 package com.example.digitalwill.view
 
+import android.app.Notification
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -33,19 +36,28 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.digitalwill.viewmodel.CustodiansViewModel
+import androidx.core.net.toUri
 
 @Composable
 fun CustodiansScreen(onNavigate: () -> Unit) {
+
+    val custodiansViewModel: CustodiansViewModel = viewModel()
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF5F5F5)) // Light Gray Background
             .padding(36.dp)
-    ) {
+    )
+
+    {
         // Top Bar: Title
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -68,12 +80,24 @@ fun CustodiansScreen(onNavigate: () -> Unit) {
         Spacer(modifier = Modifier.height(40.dp))
 
         // Custodian 1 Input
-        CustodianItemInput(label = "Custodian 1")
+        CustodianItemInput(
+            label = "Custodian 1",
+            phoneValue = custodiansViewModel.custodian1Phone.value,
+            onPhoneChange = { custodiansViewModel.custodian1Phone.value = it },
+            relationValue = custodiansViewModel.relation1.value,
+            onRelationChange = { custodiansViewModel.relation1.value = it }
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         // Custodian 2 Input
-        CustodianItemInput(label = "Custodian 2")
+        CustodianItemInput(
+            label = "Custodian 2",
+            phoneValue = custodiansViewModel.custodian2Phone.value,
+            onPhoneChange = { custodiansViewModel.custodian2Phone.value = it },
+            relationValue = custodiansViewModel.relation2.value,
+            onRelationChange = { custodiansViewModel.relation2.value = it }
+        )
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -93,7 +117,15 @@ fun CustodiansScreen(onNavigate: () -> Unit) {
             )
             // Button Layer (White Box)
             Button(
-                onClick = { onNavigate() },
+                onClick = {
+                    custodiansViewModel.saveCustodianToFirebase()
+
+                    val intent = Intent(Intent.ACTION_SENDTO)
+                    intent.data = "smsto:${custodiansViewModel.custodian1Phone.value},${custodiansViewModel.custodian2Phone.value}".toUri()
+                    intent.putExtra("sms_body","Hi, I've selected you as my custodian on Digital Will app. Please download it here: [It available o play store]")
+                    context.startActivity(intent)
+
+                    onNavigate() },
                 modifier = Modifier
                     .width(280.dp)
                     .height(65.dp)
@@ -116,12 +148,15 @@ fun CustodiansScreen(onNavigate: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustodianItemInput(label: String) {
-    // User input store karne ke liye variables (State)
-    var phoneNumber by remember { mutableStateOf("") }
-    var selectedRelation by remember { mutableStateOf("Select Relation") }
+fun CustodianItemInput(
+    label: String,
+    phoneValue: String,
+    onPhoneChange: (String) -> Unit,
+    relationValue: String,
+    onRelationChange: (String) -> Unit
+) {
     var isExpanded by remember { mutableStateOf(false) } // Dropdown khulne ke liye
-    val relations = listOf("Brother", "Sister", "Father", "Mother", "Son","Daughter","Friend")
+    val relations = listOf("Brother", "Sister", "Father", "Mother", "Son", "Daughter", "Friend")
 
     Column(modifier = Modifier.padding(bottom = 16.dp)) {
         Text(
@@ -141,8 +176,8 @@ fun CustodianItemInput(label: String) {
 
                 // 1. Phone Number Input Field
                 OutlinedTextField(
-                    value = phoneNumber,
-                    onValueChange = { phoneNumber = it },
+                    value = phoneValue,
+                    onValueChange = onPhoneChange,
                     label = { Text("Phone Number") },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -161,7 +196,7 @@ fun CustodianItemInput(label: String) {
                     onExpandedChange = { isExpanded = !isExpanded }
                 ) {
                     OutlinedTextField(
-                        value = selectedRelation,
+                        value = if (relationValue.isEmpty()) "Select Relation" else relationValue,
                         onValueChange = {},
                         readOnly = true, // User khud na likh sake
                         label = { Text("Relation") },
@@ -183,7 +218,7 @@ fun CustodianItemInput(label: String) {
                             DropdownMenuItem(
                                 text = { Text(relation) },
                                 onClick = {
-                                    selectedRelation = relation
+                                    onRelationChange(relation)
                                     isExpanded = false
                                 }
                             )

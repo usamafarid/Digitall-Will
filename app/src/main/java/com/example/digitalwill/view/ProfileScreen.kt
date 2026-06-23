@@ -91,7 +91,7 @@ fun ProfileScreen(navController: NavHostController) {
                     Text("Name", fontWeight = FontWeight.Bold, fontSize = 22.sp)
                     Text("Email", color = Color.Gray, fontSize = 14.sp)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("+92 3xx - xxxxxxx", fontWeight = FontWeight.Medium, fontSize = 16.sp)
+
                 }
             }
 

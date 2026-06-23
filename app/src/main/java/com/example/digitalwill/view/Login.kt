@@ -1,5 +1,7 @@
 package com.example.digitalwill.view
 
+import android.annotation.SuppressLint
+import android.app.Application
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -25,15 +27,18 @@ import com.example.digitalwill.viewmodel.AuthViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import androidx.credentials.GetCredentialRequest
+import androidx.lifecycle.AndroidViewModel
 import com.example.digitalwill.R
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 
+
+@SuppressLint("ViewModelConstructorInComposable")
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
-fun Login( authViewModel: AuthViewModel = viewModel() , onNavigate: () -> Unit) {
-    val auth = FirebaseAuth.getInstance()
-
+fun Login(   onNavigate: () -> Unit) {
+   // val auth = FirebaseAuth.getInstance()
+   val authViewModel = viewModel<AuthViewModel>()
     val context = LocalContext.current
     val credentialManager = androidx.credentials.CredentialManager.create(context)
     val googleIdOption= GetGoogleIdOption.Builder()
@@ -226,8 +231,7 @@ fun Login( authViewModel: AuthViewModel = viewModel() , onNavigate: () -> Unit) 
                         try {
                             val request=credentialManager.getCredential(context,getCredentialRequest)
                             if (request.credential is CustomCredential){
-
-                              val token = GoogleIdTokenCredential.createFrom(request.credential.data)
+                                val token = GoogleIdTokenCredential.createFrom(request.credential.data)
                                 authViewModel.idToken(token.idToken)
                             }
 

@@ -17,18 +17,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.digitalwill.viewmodel.AIViewModel
 
 data class ChatMessage(val text: String, val isUser: Boolean)
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AIScreen(navController: NavHostController) {
+
+    val aiViewModel= viewModel<AIViewModel>()
+
+    LaunchedEffect("") {
+
+    }
+    val result=aiViewModel.response.collectAsState()
     var messageText by remember { mutableStateOf("") }
     val chatMessages = remember {
         mutableStateListOf(
-            ChatMessage("Hello! I am your AI Assistant. How can I help you with your Digital Will today?", false)
+            ChatMessage(result.value, false)
         )
     }
 
@@ -37,7 +48,7 @@ fun AIScreen(navController: NavHostController) {
             TopAppBar(
                 title = {
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text("AI Assistant", fontWeight = FontWeight.Bold, fontSize = 26.sp)
+                        Text("AI Will Advisor", fontWeight = FontWeight.Bold, fontSize = 26.sp)
                     }
                 },
                 navigationIcon = {
@@ -125,10 +136,12 @@ fun AIScreen(navController: NavHostController) {
                     )
                     IconButton(
                         onClick = {
+                            aiViewModel.generateContent(messageText)
                             if (messageText.isNotBlank()) {
-                                chatMessages.add(ChatMessage(messageText, true))
+                                chatMessages.add(ChatMessage(messageText.reader().toString(), true))
                                 // Simple simulated response
-                                chatMessages.add(ChatMessage("Processing your request: \"$messageText\". I'm here to help secure your legacy.", false))
+                                chatMessages.add(ChatMessage("" +
+                                        "\"$messageText\"", false))
                                 messageText = ""
                             }
                         }
