@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -31,17 +32,26 @@ data class ChatMessage(val text: String, val isUser: Boolean)
 fun AIScreen(navController: NavHostController) {
 
     val aiViewModel= viewModel<AIViewModel>()
+    val result=aiViewModel.response.collectAsStateWithLifecycle()
 
-    LaunchedEffect("") {
-
-    }
-    val result=aiViewModel.response.collectAsState()
     var messageText by remember { mutableStateOf("") }
+
     val chatMessages = remember {
         mutableStateListOf(
-            ChatMessage(result.value, false)
+            ChatMessage("hello", true)
         )
     }
+    LaunchedEffect(result.value) {
+        //if condition
+        if (result.value.isNotEmpty()){
+        chatMessages.add(ChatMessage(result.value,false))
+
+        }
+
+    }
+
+
+
 
     Scaffold(
         topBar = {
@@ -136,12 +146,13 @@ fun AIScreen(navController: NavHostController) {
                     )
                     IconButton(
                         onClick = {
-                            aiViewModel.generateContent(messageText)
+                           // aiViewModel.generateContent(messageText)
                             if (messageText.isNotBlank()) {
-                                chatMessages.add(ChatMessage(messageText.reader().toString(), true))
-                                // Simple simulated response
-                                chatMessages.add(ChatMessage("" +
-                                        "\"$messageText\"", false))
+                                aiViewModel.generateContent(prompt = messageText)
+                                chatMessages.add(ChatMessage(messageText, true))
+//                                // Simple simulated response
+//                                chatMessages.add(ChatMessage("" +
+//                                        "\"$messageText\"", false))
                                 messageText = ""
                             }
                         }

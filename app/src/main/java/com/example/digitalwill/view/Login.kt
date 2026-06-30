@@ -41,7 +41,9 @@ fun Login(   onNavigate: () -> Unit) {
    val authViewModel = viewModel<AuthViewModel>()
     val context = LocalContext.current
     val credentialManager = androidx.credentials.CredentialManager.create(context)
-    val googleIdOption= GetGoogleIdOption.Builder()
+
+    val googleIdOption = GetGoogleIdOption
+        .Builder()
         .setFilterByAuthorizedAccounts(false)
         .setServerClientId("57559936279-5i53mcola6tai4i2n03s33r7mj49l0d8.apps.googleusercontent.com")
         .setAutoSelectEnabled(true)

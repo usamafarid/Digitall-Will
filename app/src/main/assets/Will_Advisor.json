@@ -1,0 +1,174 @@
+{
+  "assetCategories": [
+    {
+      "id": "physical_assets",
+      "title": "Physical Assets",
+      "assets": [
+        {
+          "id": "property",
+          "title": "Property",
+          "questions": [
+            {"id": "property_q1", "text": "Do you have a house?"},
+            {"id": "property_q2", "text": "Location(City, State, Country)"},
+            {"id": "property_q3", "text": "Price?"}
+          ]
+        },
+        {
+          "id": "bank",
+          "title": "Bank Accounts",
+          "questions": [
+            {"id": "bank_q1", "text": ""},
+            {"id": "bank_q2", "text": ""},
+            {"id": "bank_q3", "text": ""}
+          ]
+        },
+        {
+          "id": "cash",
+          "title": "Cash",
+          "questions": [
+            {"id": "cash_q1", "text": ""},
+            {"id": "cash_q2", "text": ""},
+            {"id": "cash_q3", "text": ""}
+          ]
+        },
+        {
+          "id": "insurance",
+          "title": "Insurance",
+          "questions": [
+            {"id": "insurance_q1", "text": ""},
+            {"id": "insurance_q2", "text": ""},
+            {"id": "insurance_q3", "text": ""}
+          ]
+        },
+        {
+          "id": "investment",
+          "title": "Investment",
+          "questions": [
+            {"id": "investment_q1", "text": ""},
+            {"id": "investment_q2", "text": ""},
+            {"id": "investment_q3", "text": ""}
+          ]
+        },
+        {
+          "id": "vehicle",
+          "title": "Vehicles",
+          "questions": [
+            {"id": "vehicle_q1", "text": ""},
+            {"id": "vehicle_q2", "text": ""},
+            {"id": "vehicle_q3", "text": ""}
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "digital_assets",
+      "title": "Digital Assets",
+      "assets": [
+        {
+          "id": "cryptocurrency",
+          "title": "Cryptocurrency",
+          "types": [
+            {
+              "id": "bitcoin",
+              "title": "Bitcoin",
+              "questions": [
+                {"id": "bitcoin_q1", "text": ""},
+                {"id": "bitcoin_q2", "text": ""},
+                {"id": "bitcoin_q3", "text": ""}
+              ]
+            },
+            {
+              "id": "ethereum",
+              "title": "Ethereum",
+              "questions": [
+                {"id": "ethereum_q1", "text": ""},
+                {"id": "ethereum_q2", "text": ""},
+                {"id": "ethereum_q3", "text": ""}
+              ]
+            }
+          ]
+        },
+
+        {
+          "id": "online_accounts",
+          "title": "Online Accounts",
+          "types": [
+            {
+              "id": "social_media",
+              "title": "Social Media",
+              "types": [
+                {
+                  "id": "facebook",
+                  "title": "Facebook",
+
+                  "questions": [
+                    {"id": "social_q1", "text": ""},
+                    {"id": "social_q2", "text": ""},
+                    {"id": "social_q3", "text": ""}
+                  ]
+                },
+                {
+                  "id": "instagram",
+                  "title": "Instagram",
+
+                  "questions": [
+                    {"id": "social_q1", "text": ""},
+                    {"id": "social_q2", "text": ""},
+                    {"id": "social_q3", "text": ""}
+                  ]
+                },
+                {
+                  "id": "twitter",
+                  "title": "Twitter",
+
+                  "questions": [
+                    {"id": "social_q1", "text": ""},
+                    {"id": "social_q2", "text": ""},
+                    {"id": "social_q3", "text": ""}
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "business_accounts",
+              "title": "Business Accounts",
+              "types":[
+                {
+                  "id": "youtube",
+                  "title": "Youtube",
+                  "questions": [
+                    {"id": "business_q1", "text": ""},
+                    {"id": "business_q2", "text": ""},
+                    {"id": "business_q3", "text": ""}
+                  ]
+
+                },
+                {
+                  "id": "linkedin",
+                  "title": "Linkedin",
+                  "questions": [
+                    {"id": "business_q1", "text": ""},
+                    {"id": "business_q2", "text": ""},
+                    {"id": "business_q3", "text": ""}
+                  ]
+
+                },
+                {
+                  "id": "websitr",
+                  "title": "Website",
+                  "questions": [
+                    {"id": "business_q1", "text": ""},
+                    {"id": "business_q2", "text": ""},
+                    {"id": "business_q3", "text": ""}
+                    ]
+                }
+              ]
+
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
